@@ -31,7 +31,7 @@ int main() {
         std::cout << Dawid.get_creditworthiness() << std::endl;
         Dawid.get_loan(fixed, 400, 12, 12);
         std::cout << Dawid.get_amount_total_left() << std::endl;
-        Bank.set_interest_Rate(0.28);
+        Bank.set_interest_rate(0.28);
         std::cout << Dawid.get_amount_total_left() << std::endl;
     }
     catch (std::out_of_range& e) {
