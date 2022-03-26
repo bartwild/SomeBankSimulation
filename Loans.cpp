@@ -36,8 +36,8 @@ int FixedInstallmentLoan::get_rates_amount() { return ratesAmount; }
 
 void FixedInstallmentLoan::set_interest_rates(const double& aInterestRate) {
 	double tempAmount = interest* (ratesInYear * (1 - pow((ratesInYear / (ratesInYear + interestRate)), ratesAmount)) / interestRate);
+	interest = tempAmount * aInterestRate / (ratesInYear * (1 - pow((ratesInYear / (ratesInYear + aInterestRate)), ratesAmount)));
 	interestRate = aInterestRate;
-	interest = tempAmount * interestRate / (ratesInYear * (1 - pow((ratesInYear / (ratesInYear + interestRate)), ratesAmount)));
 	loanCosts = loanCosts + tempAmount - amount;
 	amount = interest * ratesAmount;
 }

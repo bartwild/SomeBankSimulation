@@ -29,6 +29,7 @@ int main() {
         std::cout << std::endl << std::endl << std::endl;
         Dawid.overpay(fixed, 0, 15000.0);
         std::cout << Dawid.get_creditworthiness() << std::endl;
+        Dawid.get_loan(fixed, 20000, 12, 12);
         Dawid.get_loan(fixed, 400, 12, 12);
         std::cout << Dawid.get_amount_total_left() << std::endl;
         Bank.set_interest_rate(0.28);

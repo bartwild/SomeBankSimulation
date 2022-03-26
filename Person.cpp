@@ -16,16 +16,14 @@ Person::Person(Bank* aBank, int aIncome, int aLivingCost){
 
 void Person::get_loan(std::string loanType, int amount, int ratesAmount, int ratesInYear) {
 	if (loanType == FixedInstallment) {
-		FixedInstallmentLoan loan = bank->give_loan_fixed(amount, ratesAmount, ratesInYear, creditworthiness);
+		FixedInstallmentLoan loan = bank->give_loan_fixed(this, amount, ratesAmount, ratesInYear, creditworthiness);
 		fixed.push_back(loan);
 		creditworthiness -= loan.get_interest();
-		bank->add_person(this);
 	}
 	else if (loanType == DescendingInstallment) {
-		DescendingInstallmentLoan loan = bank->give_loan_descending(amount, ratesAmount, ratesInYear, creditworthiness);
+		DescendingInstallmentLoan loan = bank->give_loan_descending(this, amount, ratesAmount, ratesInYear, creditworthiness);
 		descending.push_back(loan);
 		creditworthiness -= loan.get_interest();
-		bank->add_person(this);
 	}
 	else throw std::out_of_range("Incorrect loan type.");
 }
@@ -135,7 +133,7 @@ double Person::get_negative_creditworthines(std::string loanType, int numberOfLo
 }
 
 
-std::vector<DescendingInstallmentLoan> Person::get_descending() { return descending; }
+std::vector<DescendingInstallmentLoan>& Person::get_descending() { return descending; }
 
 
-std::vector<FixedInstallmentLoan> Person::get_fixed() { return fixed; }
+std::vector<FixedInstallmentLoan>& Person::get_fixed() { return fixed; }

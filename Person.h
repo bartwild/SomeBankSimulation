@@ -27,6 +27,6 @@ public:
 	double get_interest_single(std::string loanType, int numberOfLoan);
 	double get_amount_single_left(std::string loanType, int numberOfLoan);
 	double get_negative_creditworthines(std::string loanType, int numberOfLoan);
-	std::vector<FixedInstallmentLoan> get_fixed();
-	std::vector<DescendingInstallmentLoan> get_descending();
+	std::vector<FixedInstallmentLoan>& get_fixed();
+	std::vector<DescendingInstallmentLoan>& get_descending();
 };
