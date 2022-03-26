@@ -10,8 +10,10 @@ private:
 	double interestRate;
 	double interest;
 	double loanCosts;
-	FixedInstallmentLoan(int amount, double interestRate, int ratesAmount, int ratesInYear, double creditworthiness);
-	void overpay(double amountOfOverpay);
+	double negativeCreditworthiness;
+	FixedInstallmentLoan(int amount, const double& interestRate, int ratesAmount, int ratesInYear, const double& creditworthiness);
+	void overpay(const double& amountOfOverpay);
+	void set_interest_rates(const double& interestRate);
 public:
 	double get_interest();
 	double get_loan_costs_total();
@@ -29,11 +31,13 @@ private:
 	double interestRate;
 	double interest;
 	double loanCosts;
-	DescendingInstallmentLoan(int amount, double interestRate, int ratesAmount, int ratesInYear, double creditworthiness);
-	void overpay(double amountOfOverpay);
+	double negativeCreditworthiness;
+	DescendingInstallmentLoan(int amount, const double& interestRate, int ratesAmount, int ratesInYear, const double& creditworthiness);
+	void overpay(const double& amountOfOverpay);
+	void set_interest_rates(const double& interestRate);
 public:
 	double get_interest();
-	double get_loan_costs();
+	double get_loan_costs_total();
 	double get_amount_left();
 	int get_rates_amount();
 };
