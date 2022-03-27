@@ -1,3 +1,9 @@
+// Dawid Bartosiak
+// This file include classes Loans which stand for 2 types of loan in Bank.
+// Those classes have friend class - Bank, which is the only way to access some methods in them as kind of safeguard
+// Both classes provide methods that help us dealing with problems connected with loans such as overpaying, setting rates.
+
+
 #pragma once
 
 

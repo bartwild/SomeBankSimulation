@@ -1,3 +1,6 @@
+// Dawid Bartosiak
+
+
 #include <iostream>
 #include <algorithm>
 #include "Bank.h"

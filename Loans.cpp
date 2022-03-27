@@ -1,4 +1,8 @@
+// Dawid Bartosiak
+
+
 #include <iostream>
+#include <cmath>
 #include "Loans.h"
 
 

@@ -12,6 +12,9 @@
 #include "Loans.h"
 
 
+class Bank;
+
+
 
 class Person{
 private:

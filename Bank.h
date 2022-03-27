@@ -1,3 +1,9 @@
+// Dawid Bartosiak
+// Class Bank is used for perforrming actions that Person is incapable of.
+// Bank stand for central bank which can edit interest rate.
+// Through bank person can manage its loan. Bank also calculate creditworthiness and manage it to decide of Person capability for taking loan.
+
+
 #pragma once
 #include <iostream>
 #include <vector>
