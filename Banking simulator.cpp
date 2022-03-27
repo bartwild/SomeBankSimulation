@@ -1,4 +1,6 @@
-﻿#include <iostream>
+﻿// Dawid Bartosiak
+
+#include <iostream>
 #include "Bank.h"
 #include "Person.h"
 #include "Loans.h"

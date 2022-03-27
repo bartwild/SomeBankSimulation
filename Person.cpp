@@ -1,3 +1,5 @@
+// Dawid Bartosiak
+
 #include "Person.h"
 
 
@@ -6,45 +8,74 @@ std::string DescendingInstallment = "descending";
 
 
 Person::Person(Bank* aBank, int aIncome, int aLivingCost){
+	if (aIncome < 0 || aLivingCost <= 0)
+	{ throw std::out_of_range("Income cannot be negative. Living cost can't be negative or equal 0."); }
 	bank = aBank;
-	interest = 0.0;
 	income = aIncome;
 	livingCost = aLivingCost;
 	creditworthiness = (income - livingCost) / 2;
 }
 
 
+int Person::get_income() { return income; }
+
+
+int Person::get_living_cost() { return livingCost; }
+
+
+void Person::set_income(const int& aIncome) {
+	if (aIncome < 0)
+	{ throw std::out_of_range("Income cannot be negative."); }
+	else { income = aIncome; }
+}
+
+
+void Person::set_living_cost(const int& aLivingCost) {
+	if (aLivingCost <= 0)
+	{ throw std::out_of_range("Living cost can't be negative or equal 0."); }
+	else { livingCost = aLivingCost; }
+}
+
+
 void Person::get_loan(std::string loanType, int amount, int ratesAmount, int ratesInYear) {
-	if (loanType == FixedInstallment) {
-		FixedInstallmentLoan loan = bank->give_loan_fixed(this, amount, ratesAmount, ratesInYear, creditworthiness);
-		fixed.push_back(loan);
-		creditworthiness -= loan.get_interest();
+	if (amount <= 0 || ratesAmount <= 0 || ratesInYear <= 0)
+	{ throw std::out_of_range("Any of loan parameter cannot be negative."); }
+	else {
+		if (loanType == FixedInstallment) {
+			FixedInstallmentLoan loan = bank->give_loan_fixed(this, amount, ratesAmount, ratesInYear, creditworthiness);
+			fixed.push_back(loan);
+			creditworthiness -= loan.get_interest();
+		}
+		else if (loanType == DescendingInstallment) {
+			DescendingInstallmentLoan loan = bank->give_loan_descending(this, amount, ratesAmount, ratesInYear, creditworthiness);
+			descending.push_back(loan);
+			creditworthiness -= loan.get_interest();
+		}
+		else throw std::out_of_range("Incorrect loan type.");
 	}
-	else if (loanType == DescendingInstallment) {
-		DescendingInstallmentLoan loan = bank->give_loan_descending(this, amount, ratesAmount, ratesInYear, creditworthiness);
-		descending.push_back(loan);
-		creditworthiness -= loan.get_interest();
-	}
-	else throw std::out_of_range("Incorrect loan type.");
 }
 
 
 void Person::overpay(std::string loanType, int numberOfLoan, double amount) {
-	if (loanType == FixedInstallment) {
-		bank->overpay_fixed(fixed.at(numberOfLoan), amount);
-		if (fixed.at(numberOfLoan).get_amount_left() < 0){
-			creditworthiness += bank->get_fixed_loan_negative_creditworthiness(fixed.at(numberOfLoan));
-			fixed.erase(fixed.begin() + numberOfLoan);
+	if (amount <= 0)
+	{ throw std::out_of_range("You can't overpay negative amount of money."); }
+	else {
+		if (loanType == FixedInstallment) {
+			bank->overpay_fixed(fixed.at(numberOfLoan), amount);
+			if (fixed.at(numberOfLoan).get_amount_left() < 0) {
+				creditworthiness += bank->get_fixed_loan_negative_creditworthiness(fixed.at(numberOfLoan));
+				fixed.erase(fixed.begin() + numberOfLoan);
+			}
 		}
-	}
-	else if (loanType == DescendingInstallment) {
-		bank->overpay_descending(descending.at(numberOfLoan), amount);
-		if (descending.at(numberOfLoan).get_amount_left() < 0){
-			creditworthiness += bank->get_descending_loan_negative_creditworthiness(descending.at(numberOfLoan));
-			descending.erase(descending.begin() + numberOfLoan);
+		else if (loanType == DescendingInstallment) {
+			bank->overpay_descending(descending.at(numberOfLoan), amount);
+			if (descending.at(numberOfLoan).get_amount_left() < 0) {
+				creditworthiness += bank->get_descending_loan_negative_creditworthiness(descending.at(numberOfLoan));
+				descending.erase(descending.begin() + numberOfLoan);
+			}
 		}
+		else throw std::out_of_range("Incorrect loan type.");
 	}
-	else throw std::out_of_range("Incorrect loan type.");
 }
 
 

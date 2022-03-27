@@ -13,7 +13,7 @@ private:
 	double interestRate;
 	std::vector<Person*> people;
 public:
-	Bank(double interestRate);
+	Bank(const double& interestRate);
 	FixedInstallmentLoan give_loan_fixed(Person* person, const int& amount, const int& ratesAmount, const int& ratedInYear, const double& creditworthiness);
 	DescendingInstallmentLoan give_loan_descending(Person* person, const int& amount, const int& ratesAmount, const int& ratesInYear, const double& creditworthiness);
 	void overpay_descending( DescendingInstallmentLoan& loan, double& amount);
