@@ -40,7 +40,7 @@ private:
 	double loanCosts;
 	double negativeCreditworthiness;
 	DescendingInstallmentLoan(int amount, const double& interestRate, int ratesAmount, int ratesInYear, const double& creditworthiness);
-	void overpay(double& amountOfOverpay);
+	void overpay(const double& amountOfOverpay);
 	void set_interest_rates(const double& interestRate);
 public:
 	double get_interest();

@@ -64,15 +64,15 @@ DescendingInstallmentLoan::DescendingInstallmentLoan(int aAmount, const double& 
 }
 
 
-void DescendingInstallmentLoan::overpay(double& aAmountOfOverpay) {
+void DescendingInstallmentLoan::overpay(const double& aAmountOfOverpay) {
 	double overpay = aAmountOfOverpay;
 	double nettoAmount = interest * ratesAmount / (1 + (ratesAmount)*interestRate / ratesInYear);
-	while (aAmountOfOverpay >= interest) {
-		aAmountOfOverpay -= interest;
+	while (overpay >= interest && ratesAmount > 0) {
+		overpay -= interest;
 		interest = (nettoAmount / ratesAmountTotal)* (1 + (ratesAmount) * interestRate / ratesInYear);
 		ratesAmount--;
 	}
-	amount -= overpay - aAmountOfOverpay;
+	amount -= aAmountOfOverpay - overpay;
 
 }
 

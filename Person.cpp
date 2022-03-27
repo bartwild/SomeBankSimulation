@@ -62,14 +62,14 @@ void Person::overpay(std::string loanType, int numberOfLoan, double amount) {
 	else {
 		if (loanType == FixedInstallment) {
 			bank->overpay_fixed(fixed.at(numberOfLoan), amount);
-			if (fixed.at(numberOfLoan).get_amount_left() < 0) {
+			if (fixed.at(numberOfLoan).get_amount_left() <= 0 || fixed.at(numberOfLoan).get_rates_amount() == 0) {
 				creditworthiness += bank->get_fixed_loan_negative_creditworthiness(fixed.at(numberOfLoan));
 				fixed.erase(fixed.begin() + numberOfLoan);
 			}
 		}
 		else if (loanType == DescendingInstallment) {
 			bank->overpay_descending(descending.at(numberOfLoan), amount);
-			if (descending.at(numberOfLoan).get_amount_left() < 0) {
+			if (descending.at(numberOfLoan).get_amount_left() <= 0 || descending.at(numberOfLoan).get_rates_amount() == 0) {
 				creditworthiness += bank->get_descending_loan_negative_creditworthiness(descending.at(numberOfLoan));
 				descending.erase(descending.begin() + numberOfLoan);
 			}

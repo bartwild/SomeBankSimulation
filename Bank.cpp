@@ -35,7 +35,7 @@ DescendingInstallmentLoan Bank::give_loan_descending(Person* person, const int& 
 	}
 }
 
-void Bank::overpay_descending( DescendingInstallmentLoan& loan, double& amount) {
+void Bank::overpay_descending( DescendingInstallmentLoan& loan, const double& amount) {
 	if (amount <= 0)
 	{ throw std::out_of_range("You can't overpay negative amount of money."); }
 	else{ loan.overpay(amount); }
@@ -47,6 +47,9 @@ void Bank::overpay_fixed( FixedInstallmentLoan& loan, const double& amount) {
 	{ throw std::out_of_range("You can't overpay negative amount of money."); }
 	else { loan.overpay(amount); }
 }
+
+
+double Bank::get_interest_rate() { return interestRate; }
 
 
 void Bank::set_interest_rate(const double& newInterestRate) {
