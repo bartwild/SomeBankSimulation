@@ -29,7 +29,7 @@ void Person::get_loan(std::string loanType, int amount, int ratesAmount, int rat
 }
 
 
-void Person::overpay(std::string loanType, int numberOfLoan, const double& amount) {
+void Person::overpay(std::string loanType, int numberOfLoan, double amount) {
 	if (loanType == FixedInstallment) {
 		bank->overpay_fixed(fixed.at(numberOfLoan), amount);
 		if (fixed.at(numberOfLoan).get_amount_left() < 0){
@@ -129,6 +129,20 @@ int Person::get_rates_amount(std::string loanType, int numberOfLoan) {
 double Person::get_negative_creditworthines(std::string loanType, int numberOfLoan) {
 	if (loanType == FixedInstallment) { return bank->get_fixed_loan_negative_creditworthiness(fixed.at(numberOfLoan)); }
 	else if (loanType == DescendingInstallment) { return bank->get_descending_loan_negative_creditworthiness(descending.at(numberOfLoan)); }
+	else throw std::out_of_range("Incorrect loan type.");
+}
+
+
+double Person::get_loan_costs_single(std::string loanType, int numberOfLoan) {
+	if (loanType == FixedInstallment) { return fixed.at(numberOfLoan).get_loan_costs_total(); }
+	else if (loanType == DescendingInstallment) { return descending.at(numberOfLoan).get_loan_costs_total(); }
+	else throw std::out_of_range("Incorrect loan type.");
+}
+
+
+double Person::get_amount_single_left(std::string loanType, int numberOfLoan) {
+	if (loanType == FixedInstallment) { return fixed.at(numberOfLoan).get_amount_left(); }
+	else if (loanType == DescendingInstallment) { return descending.at(numberOfLoan).get_amount_left(); }
 	else throw std::out_of_range("Incorrect loan type.");
 }
 

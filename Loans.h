@@ -25,6 +25,7 @@ public:
 class DescendingInstallmentLoan {
 friend class Bank;
 private:
+	int ratesAmountTotal;
 	int ratesAmount;
 	int ratesInYear;
 	double amount;
@@ -33,7 +34,7 @@ private:
 	double loanCosts;
 	double negativeCreditworthiness;
 	DescendingInstallmentLoan(int amount, const double& interestRate, int ratesAmount, int ratesInYear, const double& creditworthiness);
-	void overpay(const double& amountOfOverpay);
+	void overpay(double& amountOfOverpay);
 	void set_interest_rates(const double& interestRate);
 public:
 	double get_interest();

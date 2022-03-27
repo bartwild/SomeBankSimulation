@@ -38,31 +38,38 @@ void FixedInstallmentLoan::set_interest_rates(const double& aInterestRate) {
 	double tempAmount = interest* (ratesInYear * (1 - pow((ratesInYear / (ratesInYear + interestRate)), ratesAmount)) / interestRate);
 	interest = tempAmount * aInterestRate / (ratesInYear * (1 - pow((ratesInYear / (ratesInYear + aInterestRate)), ratesAmount)));
 	interestRate = aInterestRate;
-	loanCosts = loanCosts + tempAmount - amount;
+	tempAmount = amount;
 	amount = interest * ratesAmount;
+	loanCosts = loanCosts - tempAmount + amount;
 }
 
 
 DescendingInstallmentLoan::DescendingInstallmentLoan(int aAmount, const double& aInterestRate, int aRatesAmount, int aRatesInYear, const double& creditworthiness) {
-	double sum = 0.0;
-	for (int i = 1; i < aRatesAmount; i++) {
-		sum += pow((1 + aInterestRate / aRatesInYear), i);
-	}
-	interest = aAmount / sum;
+	interest = (double(aAmount / aRatesAmount)) * (1 + aRatesAmount * aInterestRate / aRatesInYear);
 	if (interest > creditworthiness) throw std::out_of_range("Your creditworthiness is too low. Try more rates or lower loan.");
 	interestRate = aInterestRate;
 	ratesAmount = aRatesAmount;
+	ratesAmountTotal = ratesAmount;
 	ratesInYear = aRatesInYear;
-	loanCosts = interest * ratesAmount;
-	amount = interest * ratesAmount;
+	loanCosts = 0.0;
+	for (int i = 1; i <= ratesAmount; i++) {
+		loanCosts += (double(aAmount / aRatesAmount))* (1 + (aRatesAmount-i+1) * aInterestRate / aRatesInYear);
+	}
+	amount = loanCosts;
 	negativeCreditworthiness = interest;
 }
 
 
-void DescendingInstallmentLoan::overpay(const double& aAmountOfOverpay) {
-	amount = amount - aAmountOfOverpay;
-	ratesAmount = ratesAmount - int(aAmountOfOverpay / interest);
-	interest = amount / ratesAmount;
+void DescendingInstallmentLoan::overpay(double& aAmountOfOverpay) {
+	double overpay = aAmountOfOverpay;
+	double nettoAmount = interest * ratesAmount / (1 + (ratesAmount)*interestRate / ratesInYear);
+	while (aAmountOfOverpay >= interest) {
+		aAmountOfOverpay -= interest;
+		interest = (nettoAmount / ratesAmountTotal)* (1 + (ratesAmount) * interestRate / ratesInYear);
+		ratesAmount--;
+	}
+	amount -= overpay - aAmountOfOverpay;
+
 }
 
 
@@ -79,9 +86,13 @@ int DescendingInstallmentLoan::get_rates_amount() { return ratesAmount; }
 
 
 void DescendingInstallmentLoan::set_interest_rates(const double& aInterestRate) {
-	double tempAmount = interest * (ratesInYear * (1 - pow((ratesInYear / (ratesInYear + interestRate)), ratesAmount)) / interestRate);
+	double nettoAmount = interest * ratesAmount / (1 + (ratesAmount)*interestRate / ratesInYear);
 	interestRate = aInterestRate;
-	interest = tempAmount * interestRate / (ratesInYear * (1 - pow((ratesInYear / (ratesInYear + interestRate)), ratesAmount)));
+	double tempAmount = 0.0;
+	for (int i = 1; i <= ratesAmount; i++) {
+		tempAmount += (nettoAmount / ratesAmount) * (1 + (ratesAmount - i + 1) * interestRate / ratesInYear);
+	}
+	interest = (nettoAmount / ratesAmount) * (1 + ratesAmount * interestRate / ratesInYear);
 	loanCosts = loanCosts + tempAmount - amount;
-	amount = interest * ratesAmount;
+	amount = tempAmount;
 }

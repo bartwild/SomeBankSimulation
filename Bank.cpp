@@ -26,7 +26,7 @@ DescendingInstallmentLoan Bank::give_loan_descending(Person* person, const int& 
 	}
 }
 
-void Bank::overpay_descending( DescendingInstallmentLoan& loan, const double& amount) {loan.overpay(amount);}
+void Bank::overpay_descending( DescendingInstallmentLoan& loan, double& amount) {loan.overpay(amount);}
 
 
 void Bank::overpay_fixed( FixedInstallmentLoan& loan, const double& amount) {loan.overpay(amount);}
