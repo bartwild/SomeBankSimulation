@@ -140,6 +140,11 @@ TEST_CASE("Testing methods correct.") {
     }
 
     SECTION("Loan correct methods.") {
-        // I see no point in testing those - setters work through Bank anyway.
+        REQUIRE(Dawid.get_amount_single_left(fixed, 0) == Approx(11173.65));
+        REQUIRE(Dawid.get_amount_single_left(descending, 0) == Approx(11133));
+        Bank.set_interest_rate(0.28);
+        REQUIRE(Dawid.get_amount_single_left(fixed, 0) == Approx(11580.71));
+        REQUIRE(Dawid.get_amount_single_left(descending, 0) == Approx(11512.06));
+
     }
 }
