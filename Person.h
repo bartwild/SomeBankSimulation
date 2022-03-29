@@ -15,7 +15,6 @@
 class Bank;
 
 
-
 class Person{
 private:
 	std::vector<FixedInstallmentLoan> fixed;
@@ -31,16 +30,16 @@ public:
 	void set_income(const int& income);
 	void set_living_cost(const int& living_cost);
 	void get_loan(std::string loanType, int amount, int ratesAmount, int ratesInYear);
-	void overpay(std::string loanType, int numberOfLoan, double amount);
-	int get_rates_amount(std::string loanType, int numberOfLoan);
+	void overpay(std::string loanType, unsigned int numberOfLoan, double amount);
+	int get_rates_amount(std::string loanType, unsigned int numberOfLoan);
 	double get_interest_total();
 	double get_amount_total_left();
 	double get_loan_costs_total();
 	double get_creditworthiness();
-	double get_interest_single(std::string loanType, int numberOfLoan);
-	double get_amount_single_left(std::string loanType, int numberOfLoan);
-	double get_loan_costs_single(std::string loanType, int numberOfLoan);
-	double get_negative_creditworthines(std::string loanType, int numberOfLoan);
+	double get_interest_single(std::string loanType, unsigned int numberOfLoan);
+	double get_amount_single_left(std::string loanType, unsigned int numberOfLoan);
+	double get_loan_costs_single(std::string loanType, unsigned  int numberOfLoan);
+	double get_negative_creditworthines(std::string loanType, unsigned int numberOfLoan);
 	std::vector<FixedInstallmentLoan>& get_fixed();
 	std::vector<DescendingInstallmentLoan>& get_descending();
 };

@@ -56,22 +56,28 @@ void Person::get_loan(std::string loanType, int amount, int ratesAmount, int rat
 }
 
 
-void Person::overpay(std::string loanType, int numberOfLoan, double amount) {
+void Person::overpay(std::string loanType, unsigned int numberOfLoan, double amount) {
 	if (amount <= 0)
 	{ throw std::out_of_range("You can't overpay negative amount of money."); }
 	else {
 		if (loanType == FixedInstallment) {
-			bank->overpay_fixed(fixed.at(numberOfLoan), amount);
-			if (fixed.at(numberOfLoan).get_amount_left() <= 0 || fixed.at(numberOfLoan).get_rates_amount() == 0) {
-				creditworthiness += bank->get_fixed_loan_negative_creditworthiness(fixed.at(numberOfLoan));
-				fixed.erase(fixed.begin() + numberOfLoan);
+			if (fixed.size() <= numberOfLoan) { throw std::out_of_range("Invalid vector subscript."); }
+			else {
+				bank->overpay_fixed(fixed.at(numberOfLoan), amount);
+				if (fixed.at(numberOfLoan).get_amount_left() <= 0 || fixed.at(numberOfLoan).get_rates_amount() == 0) {
+					creditworthiness += bank->get_fixed_loan_negative_creditworthiness(fixed.at(numberOfLoan));
+					fixed.erase(fixed.begin() + numberOfLoan);
+				}
 			}
 		}
 		else if (loanType == DescendingInstallment) {
-			bank->overpay_descending(descending.at(numberOfLoan), amount);
-			if (descending.at(numberOfLoan).get_amount_left() <= 0 || descending.at(numberOfLoan).get_rates_amount() == 0) {
-				creditworthiness += bank->get_descending_loan_negative_creditworthiness(descending.at(numberOfLoan));
-				descending.erase(descending.begin() + numberOfLoan);
+			if (descending.size() <= numberOfLoan) { throw std::out_of_range("Invalid vector subscript."); }
+			else {
+				bank->overpay_descending(descending.at(numberOfLoan), amount);
+				if (descending.at(numberOfLoan).get_amount_left() <= 0 || descending.at(numberOfLoan).get_rates_amount() == 0) {
+					creditworthiness += bank->get_descending_loan_negative_creditworthiness(descending.at(numberOfLoan));
+					descending.erase(descending.begin() + numberOfLoan);
+				}
 			}
 		}
 		else throw std::out_of_range("Incorrect loan type.");
@@ -143,37 +149,67 @@ double Person::get_amount_total_left() {
 double Person::get_creditworthiness() {return creditworthiness;}
 
 
-double Person::get_interest_single(std::string loanType, int numberOfLoan) {
-	if (loanType == FixedInstallment) { return fixed.at(numberOfLoan).get_interest(); }
-	else if (loanType == DescendingInstallment) { return descending.at(numberOfLoan).get_interest(); }
+double Person::get_interest_single(std::string loanType, unsigned int numberOfLoan) {
+	if (loanType == FixedInstallment) {
+		if (fixed.size() <= numberOfLoan) { throw std::out_of_range("Invalid vector subscript."); }
+		else { return fixed.at(numberOfLoan).get_interest(); }
+	}
+	else if (loanType == DescendingInstallment) {
+		if (fixed.size() <= numberOfLoan) { throw std::out_of_range("Invalid vector subscript."); }
+		else { return descending.at(numberOfLoan).get_interest(); }
+	}
 	else throw std::out_of_range("Incorrect loan type.");
 }
 
 
-int Person::get_rates_amount(std::string loanType, int numberOfLoan) {
-	if (loanType == FixedInstallment) { return fixed.at(numberOfLoan).get_rates_amount(); }
-	else if (loanType == DescendingInstallment) { return descending.at(numberOfLoan).get_rates_amount(); }
+int Person::get_rates_amount(std::string loanType, unsigned int numberOfLoan) {
+	if (loanType == FixedInstallment) {
+		if (fixed.size() <= numberOfLoan) { throw std::out_of_range("Invalid vector subscript."); }
+		else { return fixed.at(numberOfLoan).get_rates_amount(); }
+	}
+	else if (loanType == DescendingInstallment) {
+		if (fixed.size() <= numberOfLoan) { throw std::out_of_range("Invalid vector subscript."); }
+		else { return descending.at(numberOfLoan).get_rates_amount(); }
+	}
 	else throw std::out_of_range("Incorrect loan type.");
 }
 
 
-double Person::get_negative_creditworthines(std::string loanType, int numberOfLoan) {
-	if (loanType == FixedInstallment) { return bank->get_fixed_loan_negative_creditworthiness(fixed.at(numberOfLoan)); }
-	else if (loanType == DescendingInstallment) { return bank->get_descending_loan_negative_creditworthiness(descending.at(numberOfLoan)); }
+double Person::get_negative_creditworthines(std::string loanType, unsigned int numberOfLoan) {
+	if (loanType == FixedInstallment) {
+		if (fixed.size() <= numberOfLoan) { throw std::out_of_range("Invalid vector subscript."); }
+		else { return bank->get_fixed_loan_negative_creditworthiness(fixed.at(numberOfLoan)); }
+	}
+	else if (loanType == DescendingInstallment) {
+		if (fixed.size() <= numberOfLoan) { throw std::out_of_range("Invalid vector subscript."); }
+		else { return bank->get_descending_loan_negative_creditworthiness(descending.at(numberOfLoan)); }
+	}
 	else throw std::out_of_range("Incorrect loan type.");
 }
 
 
-double Person::get_loan_costs_single(std::string loanType, int numberOfLoan) {
-	if (loanType == FixedInstallment) { return fixed.at(numberOfLoan).get_loan_costs_total(); }
-	else if (loanType == DescendingInstallment) { return descending.at(numberOfLoan).get_loan_costs_total(); }
+double Person::get_loan_costs_single(std::string loanType, unsigned int numberOfLoan) {
+	if (loanType == FixedInstallment) {
+		if (fixed.size() <= numberOfLoan) { throw std::out_of_range("Invalid vector subscript."); }
+		else { return fixed.at(numberOfLoan).get_loan_costs_total(); }
+	}
+	else if (loanType == DescendingInstallment) {
+		if (fixed.size() <= numberOfLoan) { throw std::out_of_range("Invalid vector subscript."); }
+		else { return descending.at(numberOfLoan).get_loan_costs_total(); }
+	}
 	else throw std::out_of_range("Incorrect loan type.");
 }
 
 
-double Person::get_amount_single_left(std::string loanType, int numberOfLoan) {
-	if (loanType == FixedInstallment) { return fixed.at(numberOfLoan).get_amount_left(); }
-	else if (loanType == DescendingInstallment) { return descending.at(numberOfLoan).get_amount_left(); }
+double Person::get_amount_single_left(std::string loanType, unsigned int numberOfLoan) {
+	if (loanType == FixedInstallment) {
+		if (fixed.size() <= numberOfLoan) { throw std::out_of_range("Invalid vector subscript."); }
+		else { return fixed.at(numberOfLoan).get_amount_left(); }
+	}
+	else if (loanType == DescendingInstallment) {
+		if (fixed.size() <= numberOfLoan) { throw std::out_of_range("Invalid vector subscript."); }
+		else { return descending.at(numberOfLoan).get_amount_left(); }
+	}
 	else throw std::out_of_range("Incorrect loan type.");
 }
 

@@ -83,7 +83,7 @@ TEST_CASE("Testing methods incorrect.") {
         REQUIRE_THROWS_WITH(Dawid.set_income(-1), "Income cannot be negative.");
         REQUIRE_THROWS_WITH(Dawid.set_living_cost(-1), "Living cost can't be negative or equal 0.");
         REQUIRE_THROWS_WITH(Dawid.overpay(fixed, 0, -1), "You can't overpay negative amount of money.");
-        REQUIRE_THROWS_WITH(Dawid.overpay(fixed, 1, 1), "invalid vector subscript");
+        REQUIRE_THROWS_WITH(Dawid.overpay(fixed, 1, 1), "Invalid vector subscript.");
         REQUIRE_THROWS_WITH(Dawid.overpay("Name", 0, 1), "Incorrect loan type.");
     }
 
