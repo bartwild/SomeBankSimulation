@@ -3,8 +3,8 @@
 #include "Person.h"
 
 
-std::string FixedInstallment = "fixed";
-std::string DescendingInstallment = "descending";
+const std::string FixedInstallment = "fixed";
+const std::string DescendingInstallment = "descending";
 
 
 Person::Person(Bank* aBank, int aIncome, int aLivingCost){
