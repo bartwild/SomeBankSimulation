@@ -36,10 +36,8 @@ TEST_CASE("Testing constructors incorrect.") {
         CHECK_THROWS_AS(Bank(-0.21), std::out_of_range);
     }
 
-    SECTION("Person wrong constructors.") {
+    SECTION("Person wrong constructor.") {
         Bank Bank(0.21);
-        CHECK_THROWS_AS(Person(&Bank, -1000, 1000), std::out_of_range);
-        CHECK_THROWS_AS(Person(&Bank, 10000, -1000), std::out_of_range);
         CHECK_THROWS_AS(Person(&Bank, 10000, 0), std::out_of_range);
     }
 
@@ -47,11 +45,11 @@ TEST_CASE("Testing constructors incorrect.") {
         Bank Bank(0.21);
         Person Dawid(&Bank, 25000, 2000);
         CHECK_THROWS_AS(Dawid.get_loan(fixed, -10000, 12, 12), std::out_of_range);
-        CHECK_THROWS_AS(Dawid.get_loan(fixed, 10000, -12, 12), std::out_of_range);
-        CHECK_THROWS_AS(Dawid.get_loan(fixed, 10000, 12, -12), std::out_of_range);
+        CHECK_THROWS_AS(Dawid.get_loan(fixed, 10000, 0, 12), std::out_of_range);
+        CHECK_THROWS_AS(Dawid.get_loan(fixed, 10000, 12, 0), std::out_of_range);
         CHECK_THROWS_AS(Dawid.get_loan(descending, -10000, 12, 12), std::out_of_range);
-        CHECK_THROWS_AS(Dawid.get_loan(fixed, 10000, -12, 12), std::out_of_range);
-        CHECK_THROWS_AS(Dawid.get_loan(fixed, 10000, 12, -12), std::out_of_range);
+        CHECK_THROWS_AS(Dawid.get_loan(descending, 10000, 0, 12), std::out_of_range);
+        CHECK_THROWS_AS(Dawid.get_loan(descending, 10000, 12, 0), std::out_of_range);
         CHECK_THROWS_AS(Dawid.get_loan("Name", 10000, 12, 12), std::out_of_range);
         CHECK_THROWS_AS(Dawid.get_loan(fixed, 1000000, 12, 12), std::out_of_range);
         CHECK_THROWS_AS(Dawid.get_loan(descending, 1000000, 12, 12), std::out_of_range);
@@ -72,16 +70,11 @@ TEST_CASE("Testing methods incorrect.") {
         REQUIRE_THROWS_WITH(Bank.overpay_descending(loan2, 0.0), "You can't overpay negative amount of money.");
         REQUIRE_THROWS_WITH(Bank.overpay_fixed(loan1, 0), "You can't overpay negative amount of money.");
         REQUIRE_THROWS_WITH(Bank.give_loan_fixed(&Dawid, -1000, 12, 12, Dawid.get_creditworthiness()), "Any of loan parameter cannot be negative.");
-        REQUIRE_THROWS_WITH(Bank.give_loan_fixed(&Dawid, 1000, -12, 12, Dawid.get_creditworthiness()), "Any of loan parameter cannot be negative.");
-        REQUIRE_THROWS_WITH(Bank.give_loan_fixed(&Dawid, 1000, 12, -12, Dawid.get_creditworthiness()), "Any of loan parameter cannot be negative.");
-        REQUIRE_THROWS_WITH(Bank.give_loan_descending(&Dawid, 1000, 12, -12, Dawid.get_creditworthiness()), "Any of loan parameter cannot be negative.");
-        REQUIRE_THROWS_WITH(Bank.give_loan_descending(&Dawid, 1000, -12, 12, Dawid.get_creditworthiness()), "Any of loan parameter cannot be negative.");
         REQUIRE_THROWS_WITH(Bank.give_loan_descending(&Dawid, -1000, 12, 12, Dawid.get_creditworthiness()), "Any of loan parameter cannot be negative.");
     }
 
     SECTION("Person wrong methods.") {
-        REQUIRE_THROWS_WITH(Dawid.set_income(-1), "Income cannot be negative.");
-        REQUIRE_THROWS_WITH(Dawid.set_living_cost(-1), "Living cost can't be negative or equal 0.");
+        REQUIRE_THROWS_WITH(Dawid.set_living_cost(-0), "Living cost can't be negative or equal 0.");
         REQUIRE_THROWS_WITH(Dawid.overpay(fixed, 0, -1), "You can't overpay negative amount of money.");
         REQUIRE_THROWS_WITH(Dawid.overpay(fixed, 1, 1), "Invalid vector subscript.");
         REQUIRE_THROWS_WITH(Dawid.overpay("Name", 0, 1), "Incorrect loan type.");
@@ -141,10 +134,10 @@ TEST_CASE("Testing methods correct.") {
 
     SECTION("Loan correct methods.") {
         REQUIRE(Dawid.get_amount_single_left(fixed, 0) == Approx(11173.65));
-        REQUIRE(Dawid.get_amount_single_left(descending, 0) == Approx(11133));
+        REQUIRE(Dawid.get_amount_single_left(descending, 0) == Approx(11137.5));
         Bank.set_interest_rate(0.28);
         REQUIRE(Dawid.get_amount_single_left(fixed, 0) == Approx(11580.71));
-        REQUIRE(Dawid.get_amount_single_left(descending, 0) == Approx(11512.06));
+        REQUIRE(Dawid.get_amount_single_left(descending, 0) == Approx(11516.66));
 
     }
 }

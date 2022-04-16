@@ -7,7 +7,7 @@ const std::string FixedInstallment = "fixed";
 const std::string DescendingInstallment = "descending";
 
 
-Person::Person(Bank* aBank, int aIncome, int aLivingCost){
+Person::Person(Bank* aBank, unsigned int aIncome, unsigned int aLivingCost){
 	if (aIncome < 0 || aLivingCost <= 0)
 	{ throw std::out_of_range("Income cannot be negative. Living cost can't be negative or equal 0."); }
 	bank = aBank;
@@ -23,21 +23,21 @@ int Person::get_income() { return income; }
 int Person::get_living_cost() { return livingCost; }
 
 
-void Person::set_income(const int& aIncome) {
+void Person::set_income(const unsigned int& aIncome) {
 	if (aIncome < 0)
 	{ throw std::out_of_range("Income cannot be negative."); }
 	else { income = aIncome; }
 }
 
 
-void Person::set_living_cost(const int& aLivingCost) {
+void Person::set_living_cost(const unsigned int& aLivingCost) {
 	if (aLivingCost <= 0)
 	{ throw std::out_of_range("Living cost can't be negative or equal 0."); }
 	else { livingCost = aLivingCost; }
 }
 
 
-void Person::get_loan(std::string loanType, const double& amount, int ratesAmount, int ratesInYear) {
+void Person::get_loan(std::string loanType, const double& amount, unsigned int ratesAmount, unsigned int ratesInYear) {
 	if (amount <= 0 || ratesAmount <= 0 || ratesInYear <= 0)
 	{ throw std::out_of_range("Any of loan parameter cannot be negative."); }
 	else {

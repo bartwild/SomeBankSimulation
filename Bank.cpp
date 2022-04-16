@@ -14,7 +14,7 @@ Bank::Bank(const double& aInterestRate) {
 }
 
 
-FixedInstallmentLoan Bank::give_loan_fixed(Person* person, const double& amount, const int& ratesAmount, const int& ratesInYear, const double& creditworthiness){
+FixedInstallmentLoan Bank::give_loan_fixed(Person* person, const double& amount, const unsigned int& ratesAmount, const unsigned int& ratesInYear, const double& creditworthiness){
 	if (amount <= 0 || ratesAmount <= 0 || ratesInYear <= 0 )
 	{ throw std::out_of_range("Any of loan parameter cannot be negative."); }
 	FixedInstallmentLoan loan = FixedInstallmentLoan(Authorisation(), amount, interestRate, ratesAmount, ratesInYear, creditworthiness);
@@ -26,7 +26,7 @@ FixedInstallmentLoan Bank::give_loan_fixed(Person* person, const double& amount,
 }
 
 
-FixedInstallmentLoan Bank::create_loan_fixed(const double& amount, const int& ratesAmount, const int& ratesInYear) {
+FixedInstallmentLoan Bank::create_loan_fixed(const double& amount, const unsigned int& ratesAmount, const unsigned int& ratesInYear) {
 	if (amount <= 0 || ratesAmount <= 0 || ratesInYear <= 0) {
 		throw std::out_of_range("Any of loan parameter cannot be negative.");
 	}
@@ -35,7 +35,7 @@ FixedInstallmentLoan Bank::create_loan_fixed(const double& amount, const int& ra
 }
 
 
-DescendingInstallmentLoan Bank::give_loan_descending(Person* person, const double& amount, const int& ratesAmount, const int& ratesInYear, const double& creditworthiness) {
+DescendingInstallmentLoan Bank::give_loan_descending(Person* person, const double& amount, const unsigned int& ratesAmount, const unsigned int& ratesInYear, const double& creditworthiness) {
 	if (amount <= 0 || ratesAmount <= 0 || ratesInYear <= 0)
 	{ throw std::out_of_range("Any of loan parameter cannot be negative.");  }
 	DescendingInstallmentLoan loan = DescendingInstallmentLoan(Authorisation(), amount, interestRate, ratesAmount, ratesInYear, creditworthiness);
@@ -47,7 +47,7 @@ DescendingInstallmentLoan Bank::give_loan_descending(Person* person, const doubl
 }
 
 
-DescendingInstallmentLoan Bank::create_loan_descending(const double& amount, const int& ratesAmount, const int& ratesInYear) {
+DescendingInstallmentLoan Bank::create_loan_descending(const double& amount, const unsigned int& ratesAmount, const unsigned int& ratesInYear) {
 	if (amount <= 0 || ratesAmount <= 0 || ratesInYear <= 0){
 		throw std::out_of_range("Any of loan parameter cannot be negative.");
 	}

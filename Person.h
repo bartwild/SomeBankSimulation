@@ -20,16 +20,16 @@ private:
 	std::vector<FixedInstallmentLoan> fixed;
 	std::vector<DescendingInstallmentLoan> descending;
 	Bank* bank;
-	int income;
-	int livingCost;
+	unsigned int income;
+	unsigned int livingCost;
 	double creditworthiness;
 public:
-	Person(Bank *bank, int income, int livingCost);
+	Person(Bank *bank, unsigned int income, unsigned int livingCost);
 	int get_income();
 	int get_living_cost();
-	void set_income(const int& income);
-	void set_living_cost(const int& living_cost);
-	void get_loan(std::string loanType, const double& amount, int ratesAmount, int ratesInYear);
+	void set_income(const unsigned int& income);
+	void set_living_cost(const unsigned int& living_cost);
+	void get_loan(std::string loanType, const double& amount, unsigned int ratesAmount, unsigned int ratesInYear);
 	void overpay(std::string loanType, unsigned int numberOfLoan, const double& amount);
 	void operator+(FixedInstallmentLoan loan);
 	void operator+(DescendingInstallmentLoan loan);
