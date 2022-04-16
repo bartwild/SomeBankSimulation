@@ -1,12 +1,17 @@
 ﻿// Dawid Bartosiak
 
+
+#define  _CRT_SECURE_NO_WARNINGS
 #include <fstream>
 #include <string>
 #include <iostream>
+#include <chrono>
+#include <ctime>
 #include "Bank.h"
 #include "Person.h"
 #include "Loans.h"
 #include "BankIO.h"
+
 
 using std::cout;
 using std::endl;
@@ -14,6 +19,7 @@ using std::endl;
 
 
 int main() {
+    auto start = std::chrono::system_clock::now();
     Bank Bank(0.21);
     Person Dawid(&Bank, 25000, 2000);
     std::string fixed = "fixed";
@@ -64,7 +70,9 @@ int main() {
     cout << endl;
     BankIO::save_file_one_person(Bank, Dawid);
     BankIO::load_total_loan(Dawid, 0);
+    cout << "Add from file to current - making loan single and fixed, so the price is going down as for single loan:" << endl;
     cout << Dawid.get_amount_total_left() << endl;
+    cout << "So the diff is: " << Dawid.get_amount_total_left() - 2*Dawid.get_amount_single_left(fixed, 2) << endl;
     FixedInstallmentLoan loanFixed = Bank.create_loan_fixed(1123, 12, 12);
     DescendingInstallmentLoan loanDescending = Bank.create_loan_descending(1123, 12, 12);
     cout << "Add fixed by operator +" << endl;
@@ -81,5 +89,11 @@ int main() {
     cout << loanFixed;
     cout << "Information about descending: ";
     cout << loanDescending;
+    cout << endl << endl;
+    auto end = std::chrono::system_clock::now();
+    std::chrono::duration<double> elapsed_seconds = end - start;
+    std::time_t end_time = std::chrono::system_clock::to_time_t(end);
+    std::cout << "finished computation at " << std::ctime(&end_time);
+    std::cout << "elapsed time: " << elapsed_seconds.count() << "s\n";
     return 0;
 }

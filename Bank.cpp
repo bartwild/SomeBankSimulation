@@ -4,6 +4,8 @@
 #include <iostream>
 #include <algorithm>
 #include "Bank.h"
+const int bankCreditworthiness = 99999999;
+
 
 Bank::Bank(const double& aInterestRate) {
 	if (aInterestRate < 0 )
@@ -28,7 +30,7 @@ FixedInstallmentLoan Bank::create_loan_fixed(const double& amount, const int& ra
 	if (amount <= 0 || ratesAmount <= 0 || ratesInYear <= 0) {
 		throw std::out_of_range("Any of loan parameter cannot be negative.");
 	}
-	FixedInstallmentLoan loan = FixedInstallmentLoan(Authorisation(), amount, interestRate, ratesAmount, ratesInYear, INFINITY);
+	FixedInstallmentLoan loan = FixedInstallmentLoan(Authorisation(), amount, interestRate, ratesAmount, ratesInYear, bankCreditworthiness);
 	return loan;
 }
 
@@ -49,7 +51,7 @@ DescendingInstallmentLoan Bank::create_loan_descending(const double& amount, con
 	if (amount <= 0 || ratesAmount <= 0 || ratesInYear <= 0){
 		throw std::out_of_range("Any of loan parameter cannot be negative.");
 	}
-	DescendingInstallmentLoan loan = DescendingInstallmentLoan(Authorisation(), amount, interestRate, ratesAmount, ratesInYear, INFINITY);
+	DescendingInstallmentLoan loan = DescendingInstallmentLoan(Authorisation(), amount, interestRate, ratesAmount, ratesInYear, bankCreditworthiness);
 	return loan;
 }
 
