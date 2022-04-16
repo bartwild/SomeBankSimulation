@@ -7,9 +7,8 @@ const std::string FixedInstallment = "fixed";
 const std::string DescendingInstallment = "descending";
 
 
-Person::Person(Bank* aBank, unsigned int aIncome, unsigned int aLivingCost){
-	if (aIncome < 0 || aLivingCost <= 0)
-	{ throw std::out_of_range("Income cannot be negative. Living cost can't be negative or equal 0."); }
+Person::Person(Bank* aBank, unsigned int aIncome, unsigned int aLivingCost) {
+	if (aLivingCost <= 0){throw std::out_of_range("Living cost can't be negative or equal 0.");}
 	bank = aBank;
 	income = aIncome;
 	livingCost = aLivingCost;
@@ -24,22 +23,24 @@ int Person::get_living_cost() { return livingCost; }
 
 
 void Person::set_income(const unsigned int& aIncome) {
-	if (aIncome < 0)
-	{ throw std::out_of_range("Income cannot be negative."); }
-	else { income = aIncome; }
+	income = aIncome;
 }
 
 
 void Person::set_living_cost(const unsigned int& aLivingCost) {
 	if (aLivingCost <= 0)
-	{ throw std::out_of_range("Living cost can't be negative or equal 0."); }
+	{
+		throw std::out_of_range("Living cost can't be negative or equal 0.");
+	}
 	else { livingCost = aLivingCost; }
 }
 
 
 void Person::get_loan(std::string loanType, const double& amount, unsigned int ratesAmount, unsigned int ratesInYear) {
 	if (amount <= 0 || ratesAmount <= 0 || ratesInYear <= 0)
-	{ throw std::out_of_range("Any of loan parameter cannot be negative."); }
+	{
+		throw std::out_of_range("Any of loan parameter cannot be negative.");
+	}
 	else {
 		if (loanType == FixedInstallment) {
 			FixedInstallmentLoan loan = bank->give_loan_fixed(this, amount, ratesAmount, ratesInYear, creditworthiness);
@@ -58,7 +59,9 @@ void Person::get_loan(std::string loanType, const double& amount, unsigned int r
 
 void Person::overpay(std::string loanType, unsigned int numberOfLoan, const double& amount) {
 	if (amount <= 0)
-	{ throw std::out_of_range("You can't overpay negative amount of money."); }
+	{
+		throw std::out_of_range("You can't overpay negative amount of money.");
+	}
 	else {
 		if (loanType == FixedInstallment) {
 			if (fixed.size() <= numberOfLoan) { throw std::out_of_range("Invalid vector subscript."); }
@@ -146,7 +149,7 @@ double Person::get_amount_total_left() {
 }
 
 
-double Person::get_creditworthiness() {return creditworthiness;}
+double Person::get_creditworthiness() { return creditworthiness; }
 
 
 double Person::get_interest_single(std::string loanType, unsigned int numberOfLoan) {
@@ -258,3 +261,4 @@ void Person::operator+(DescendingInstallmentLoan loan) {
 	creditworthiness -= loan.get_interest();
 	descending.push_back(loan);
 }
+
