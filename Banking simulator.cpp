@@ -1,13 +1,16 @@
 ﻿// Dawid Bartosiak
 
+#include <fstream>
+#include <string>
 #include <iostream>
 #include "Bank.h"
 #include "Person.h"
 #include "Loans.h"
-
+#include "BankIO.h"
 
 using std::cout;
 using std::endl;
+
 
 
 int main() {
@@ -55,9 +58,28 @@ int main() {
     cout << "Total costs of single loan: " << Dawid.get_loan_costs_single(descending, 0) << endl;
     cout << "Taking loan.." << endl;
     Dawid.overpay(descending, 0, 10000.0);
-    cout << "Sum of loans left to pay: " << Dawid.get_amount_single_left(descending, 0) << endl;
+    cout << "Sum of loans left to pay: " << Dawid.get_amount_total_left() << endl;
     cout << "Total costs of single loan: " << Dawid.get_loan_costs_single(descending, 0) << endl;
     cout << "All rates sum: " << Dawid.get_interest_total() << endl;
     cout << endl;
+    BankIO::save_file_one_person(Bank, Dawid);
+    BankIO::load_total_loan(Dawid, 0);
+    cout << Dawid.get_amount_total_left() << endl;
+    FixedInstallmentLoan loanFixed = Bank.create_loan_fixed(1123, 12, 12);
+    DescendingInstallmentLoan loanDescending = Bank.create_loan_descending(1123, 12, 12);
+    cout << "Add fixed by operator +" << endl;
+    Dawid + loanFixed;
+    cout << Dawid.get_amount_total_left() << endl;
+    cout << "Add descending by operator +" << endl;
+    Dawid + loanDescending;
+    cout << Dawid.get_amount_total_left() << endl;
+    cout << "Is fixed cheaper than descending?: ";
+    cout << (loanFixed < loanDescending) << endl;
+    cout << "Is descending cheaper than fixed?: ";
+    cout << (loanDescending < loanFixed) << endl;
+    cout << "Information about fixed: ";
+    cout << loanFixed;
+    cout << "Information about descending: ";
+    cout << loanDescending;
     return 0;
 }

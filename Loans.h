@@ -11,6 +11,9 @@ class Authorisation {
 };
 
 
+class DescendingInstallmentLoan;
+
+
 class FixedInstallmentLoan{
 private:
 	int ratesAmount;
@@ -21,14 +24,19 @@ private:
 	double loanCosts;
 	double negativeCreditworthiness;
 public:
-	FixedInstallmentLoan(Authorisation, int amount, const double& interestRate, int ratesAmount, int ratesInYear, const double& creditworthiness);
+	FixedInstallmentLoan(Authorisation, const double& amount, const double& interestRate, int ratesAmount, int ratesInYear, const double& creditworthiness);
 	void overpay(Authorisation, const double& amountOfOverpay);
 	void set_interest_rates(Authorisation, const double& interestRate);
+	bool operator>(FixedInstallmentLoan loan);
+	bool operator<(FixedInstallmentLoan loan);
+	bool operator>(DescendingInstallmentLoan loan);
+	bool operator<(DescendingInstallmentLoan loan);
 	double get_negative_creditworthiness(Authorisation);
 	double get_interest();
 	double get_loan_costs_total();
 	double get_amount_left();
 	int get_rates_amount();
+	friend std::ostream& operator<<(std::ostream& os, FixedInstallmentLoan& loan);
 };
 
 
@@ -43,12 +51,17 @@ private:
 	double loanCosts;
 	double negativeCreditworthiness;
 public:
-	DescendingInstallmentLoan(Authorisation, int amount, const double& interestRate, int ratesAmount, int ratesInYear, const double& creditworthiness);
+	DescendingInstallmentLoan(Authorisation, const double& amount, const double& interestRate, int ratesAmount, int ratesInYear, const double& creditworthiness);
 	void overpay(Authorisation, const double& amountOfOverpay);
 	void set_interest_rates(Authorisation, const double& interestRate);
+	bool operator>(DescendingInstallmentLoan loan);
+	bool operator>(FixedInstallmentLoan loan);
+	bool operator<(DescendingInstallmentLoan loan);
+	bool operator<(FixedInstallmentLoan loan);
 	double get_negative_creditworthiness(Authorisation);
 	double get_interest();
 	double get_loan_costs_total();
 	double get_amount_left();
 	int get_rates_amount();
+	friend std::ostream& operator<<(std::ostream& os, DescendingInstallmentLoan& loan);
 };

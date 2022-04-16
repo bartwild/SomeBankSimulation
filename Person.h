@@ -29,9 +29,12 @@ public:
 	int get_living_cost();
 	void set_income(const int& income);
 	void set_living_cost(const int& living_cost);
-	void get_loan(std::string loanType, int amount, int ratesAmount, int ratesInYear);
-	void overpay(std::string loanType, unsigned int numberOfLoan, double amount);
+	void get_loan(std::string loanType, const double& amount, int ratesAmount, int ratesInYear);
+	void overpay(std::string loanType, unsigned int numberOfLoan, const double& amount);
+	void operator+(FixedInstallmentLoan loan);
+	void operator+(DescendingInstallmentLoan loan);
 	int get_rates_amount(std::string loanType, unsigned int numberOfLoan);
+	unsigned int get_longest_rates();
 	double get_interest_total();
 	double get_amount_total_left();
 	double get_loan_costs_total();

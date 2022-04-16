@@ -37,7 +37,7 @@ void Person::set_living_cost(const int& aLivingCost) {
 }
 
 
-void Person::get_loan(std::string loanType, int amount, int ratesAmount, int ratesInYear) {
+void Person::get_loan(std::string loanType, const double& amount, int ratesAmount, int ratesInYear) {
 	if (amount <= 0 || ratesAmount <= 0 || ratesInYear <= 0)
 	{ throw std::out_of_range("Any of loan parameter cannot be negative."); }
 	else {
@@ -56,7 +56,7 @@ void Person::get_loan(std::string loanType, int amount, int ratesAmount, int rat
 }
 
 
-void Person::overpay(std::string loanType, unsigned int numberOfLoan, double amount) {
+void Person::overpay(std::string loanType, unsigned int numberOfLoan, const double& amount) {
 	if (amount <= 0)
 	{ throw std::out_of_range("You can't overpay negative amount of money."); }
 	else {
@@ -218,3 +218,43 @@ std::vector<DescendingInstallmentLoan>& Person::get_descending() { return descen
 
 
 std::vector<FixedInstallmentLoan>& Person::get_fixed() { return fixed; }
+
+
+unsigned int Person::get_longest_rates() {
+	unsigned int longestRates = 0;
+	unsigned int rates = 0;
+	if (size(fixed) != 0) {
+		for (unsigned int i = 0; i <= size(fixed) - 1; ++i) {
+			rates = fixed.at(i).get_rates_amount();
+			if (rates > longestRates) longestRates = rates;
+		}
+		if (size(descending) == 0) { return longestRates; }
+		for (unsigned int i = 0; i <= size(descending) - 1; ++i) {
+			rates = descending.at(i).get_rates_amount();
+			if (rates > longestRates) longestRates = rates;
+		}
+		return longestRates;
+	}
+	else {
+		if (size(descending) == 0) { return longestRates; }
+		for (unsigned int i = 0; i <= size(descending) - 1; ++i) {
+			rates = descending.at(i).get_rates_amount();
+			if (rates > longestRates) longestRates = rates;
+		}
+		return longestRates;
+	}
+}
+
+
+void Person::operator+(FixedInstallmentLoan loan) {
+	if (creditworthiness - loan.get_interest() < 0) { return; }
+	creditworthiness -= loan.get_interest();
+	fixed.push_back(loan);
+}
+
+
+void Person::operator+(DescendingInstallmentLoan loan) {
+	if (creditworthiness - loan.get_interest() < 0) { return; }
+	creditworthiness -= loan.get_interest();
+	descending.push_back(loan);
+}

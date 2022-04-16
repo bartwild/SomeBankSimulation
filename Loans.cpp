@@ -6,7 +6,7 @@
 #include "Loans.h"
 
 
-FixedInstallmentLoan::FixedInstallmentLoan(Authorisation, int aAmount, const double& aInterestRate, int aRatesAmount, int aRatesInYear, const double& creditworthiness) {
+FixedInstallmentLoan::FixedInstallmentLoan(Authorisation, const double& aAmount, const double& aInterestRate, int aRatesAmount, int aRatesInYear, const double& creditworthiness) {
 	interest = aAmount * aInterestRate / (aRatesInYear * (1 - pow((aRatesInYear/(aRatesInYear + aInterestRate)),aRatesAmount)));
 	if (interest > creditworthiness) throw std::out_of_range("Your creditworthiness is too low. Try more rates or lower loan.");
 	interestRate = aInterestRate;
@@ -50,7 +50,37 @@ void FixedInstallmentLoan::set_interest_rates(Authorisation, const double& aInte
 }
 
 
-DescendingInstallmentLoan::DescendingInstallmentLoan(Authorisation, int aAmount, const double& aInterestRate, int aRatesAmount, int aRatesInYear, const double& creditworthiness) {
+bool FixedInstallmentLoan::operator>(FixedInstallmentLoan loan){
+	if (loan.get_loan_costs_total() < loanCosts) { return true; }
+	return false;
+}
+
+
+bool FixedInstallmentLoan::operator<(FixedInstallmentLoan loan) {
+	if (loan.get_loan_costs_total() > loanCosts) { return true; }
+	return false;
+}
+
+
+bool FixedInstallmentLoan::operator>(DescendingInstallmentLoan loan) {
+	if (loan.get_loan_costs_total() < loanCosts) { return true; }
+	return false;
+}
+
+
+bool FixedInstallmentLoan::operator<(DescendingInstallmentLoan loan) {
+	if (loan.get_loan_costs_total() > loanCosts) { return true; }
+	return false;
+}
+
+
+std::ostream& operator<<(std::ostream& os, FixedInstallmentLoan& loan) {
+	os << "Fixed installment loan with total cost: " << loan.loanCosts << " and current installment: " << loan.interest << std::endl;
+	return os;
+}
+
+
+DescendingInstallmentLoan::DescendingInstallmentLoan(Authorisation, const double& aAmount, const double& aInterestRate, int aRatesAmount, int aRatesInYear, const double& creditworthiness) {
 	interest = (double(aAmount / aRatesAmount)) * (1 + aRatesAmount * aInterestRate / aRatesInYear);
 	if (interest > creditworthiness) throw std::out_of_range("Your creditworthiness is too low. Try more rates or lower loan.");
 	interestRate = aInterestRate;
@@ -104,4 +134,33 @@ void DescendingInstallmentLoan::set_interest_rates(Authorisation, const double& 
 	interest = (nettoAmount / ratesAmount) * (1 + ratesAmount * interestRate / ratesInYear);
 	loanCosts = loanCosts + tempAmount - amount;
 	amount = tempAmount;
+}
+
+bool DescendingInstallmentLoan::operator>(DescendingInstallmentLoan loan) {
+	if (loan.get_loan_costs_total() < loanCosts) { return true; }
+	return false;
+}
+
+
+bool DescendingInstallmentLoan::operator>(FixedInstallmentLoan loan) {
+	if (loan.get_loan_costs_total() < loanCosts) { return true; }
+	return false;
+}
+
+
+bool DescendingInstallmentLoan::operator<(FixedInstallmentLoan loan) {
+	if (loan.get_loan_costs_total() > loanCosts) { return true; }
+	return false;
+}
+
+
+bool DescendingInstallmentLoan::operator<(DescendingInstallmentLoan loan) {
+	if (loan.get_loan_costs_total() > loanCosts) { return true; }
+	return false;
+}
+
+
+std::ostream& operator<<(std::ostream& os, DescendingInstallmentLoan& loan){
+	os << "Descending installment loan with total cost: " << loan.loanCosts << " and current installment: " << loan.interest << std::endl;
+	return os;
 }
