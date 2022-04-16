@@ -2,6 +2,7 @@
 
 #define CATCH_CONFIG_MAIN
 #include <iostream>
+#include "BankIO.h"
 #include "catch.hpp"
 #include "Bank.h"
 #include "Loans.h"
@@ -34,6 +35,7 @@ TEST_CASE("Testing constructors incorrect.") {
 
     SECTION("Bank wrong constructor.") {
         CHECK_THROWS_AS(Bank(-0.21), std::out_of_range);
+        CHECK_THROWS_AS(Bank(0), std::out_of_range);
     }
 
     SECTION("Person wrong constructor.") {
@@ -138,6 +140,51 @@ TEST_CASE("Testing methods correct.") {
         Bank.set_interest_rate(0.28);
         REQUIRE(Dawid.get_amount_single_left(fixed, 0) == Approx(11580.71));
         REQUIRE(Dawid.get_amount_single_left(descending, 0) == Approx(11516.66));
-
     }
+}
+
+
+TEST_CASE("Operators overloads") {
+    Bank Bank(0.21);
+    Person Dawid(&Bank, 25000, 2000);
+    FixedInstallmentLoan loan1 = Bank.create_loan_fixed(1000, 12, 12);
+    DescendingInstallmentLoan loan2 = Bank.create_loan_descending(1000, 12, 12);
+    FixedInstallmentLoan loan3 = Bank.create_loan_fixed(1600, 12, 12);
+    DescendingInstallmentLoan loan4 = Bank.create_loan_descending(1500, 12, 12);
+
+
+    SECTION("Person operator") {
+        Dawid + loan1;
+        REQUIRE(Dawid.get_creditworthiness() < 11500);
+        Dawid + loan2;
+        REQUIRE(Dawid.get_creditworthiness() < 11400);
+    }
+
+    SECTION("Loans operators") {
+        REQUIRE((loan1 < loan2) == false);
+        REQUIRE((loan1 > loan2) == true);
+        REQUIRE((loan1 < loan3) == true);
+        REQUIRE((loan2 < loan4) == true);
+    }
+}
+
+
+TEST_CASE("Input/output with file") {
+    Bank bank(0.21);
+    Person Dawid(&bank, 25000, 2000);
+    Dawid.get_loan(fixed, 10000, 12, 12);
+    Dawid.get_loan(descending, 10000, 12, 12);
+    BankIO::save_file_one_person(bank, Dawid);
+    bank.set_interest_rate(0.001);
+    Dawid.overpay(fixed, 0, 100000);
+    Dawid.overpay(descending, 0, 100000);
+    Dawid.set_income(0);
+    Dawid.set_living_cost(1);
+    BankIO::load_file_single_person(bank, Dawid);
+    REQUIRE(bank.get_interest_rate() == 0.21);
+    REQUIRE(Dawid.get_living_cost() == 2000);
+    REQUIRE(Dawid.get_income() == 25000);
+    REQUIRE(Dawid.get_loan_costs_total() > 20000);
+    REQUIRE(Dawid.get_creditworthiness() < 11500);
+    REQUIRE(Dawid.get_loan_costs_single(fixed, 0) == Dawid.get_loan_costs_total());
 }

@@ -8,7 +8,7 @@ const int bankCreditworthiness = 99999999;
 
 
 Bank::Bank(const double& aInterestRate) {
-	if (aInterestRate < 0 )
+	if (aInterestRate <= 0 )
 	{ throw std::out_of_range("Interest rate cannot be negative."); }
 	else { interestRate = aInterestRate; }
 }
@@ -74,7 +74,7 @@ double Bank::get_interest_rate() { return interestRate; }
 
 
 void Bank::set_interest_rate(const double& newInterestRate) {
-	if (newInterestRate < 0)
+	if (newInterestRate <= 0)
 	{ throw std::out_of_range("Interest rate cannot be negative."); }
 	else {
 		interestRate = newInterestRate;
@@ -90,7 +90,7 @@ void Bank::set_interest_rate(const double& newInterestRate) {
 				}
 			}
 			else {
-				if (size((*people.at(i)).get_descending()) == 0) {
+				if (size((*people.at(i)).get_descending()) != 0) {
 					for (unsigned int j = 0; j <= size((*people.at(i)).get_descending()) - 1; ++j) {
 						(*people.at(i)).get_descending().at(j).set_interest_rates(Authorisation(), interestRate);
 					}
