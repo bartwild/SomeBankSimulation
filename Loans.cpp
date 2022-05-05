@@ -5,7 +5,6 @@
 #include <cmath>
 #include "Loans.h"
 
-
 FixedInstallmentLoan::FixedInstallmentLoan(Authorisation, const double& aAmount, const double& aInterestRate, int aRatesAmount, int aRatesInYear, const double& creditworthiness) {
 	interest = aAmount * aInterestRate / (aRatesInYear * (1 - pow((aRatesInYear/(aRatesInYear + aInterestRate)),aRatesAmount)));
 	if (interest > creditworthiness) throw std::out_of_range("Your creditworthiness is too low. Try more rates or lower loan.");
@@ -93,6 +92,7 @@ bool Loan::operator<(DescendingInstallmentLoan loan){
 	if (loan.get_loan_costs_total() > loanCosts) { return true; }
 	return false;
 }
+
 
 double Loan::get_negative_creditworthiness(Authorisation) const noexcept {
 	return negativeCreditworthiness;

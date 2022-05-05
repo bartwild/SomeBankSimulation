@@ -7,9 +7,9 @@ const std::string FixedInstallment = "fixed";
 const std::string DescendingInstallment = "descending";
 
 
-Person::Person(Bank* aBank, unsigned int aIncome, unsigned int aLivingCost) {
+Person::Person(std::shared_ptr<Bank> aBank, unsigned int aIncome, unsigned int aLivingCost) {
 	if (aLivingCost <= 0){throw std::out_of_range("Living cost can't be negative or equal 0.");}
-	bank = aBank;
+	bank = std::move(aBank);
 	income = aIncome;
 	livingCost = aLivingCost;
 	creditworthiness = (income - livingCost) / 2;
@@ -43,12 +43,12 @@ void Person::get_loan(std::string loanType, const double& amount, unsigned int r
 	}
 	else {
 		if (loanType == FixedInstallment) {
-			FixedInstallmentLoan loan = bank->give_loan_fixed(this, amount, ratesAmount, ratesInYear, creditworthiness);
+			FixedInstallmentLoan loan = bank->give_loan_fixed(getPerson(), amount, ratesAmount, ratesInYear, creditworthiness);
 			fixed.push_back(loan);
 			creditworthiness -= loan.get_interest();
 		}
 		else if (loanType == DescendingInstallment) {
-			DescendingInstallmentLoan loan = bank->give_loan_descending(this, amount, ratesAmount, ratesInYear, creditworthiness);
+			DescendingInstallmentLoan loan = bank->give_loan_descending(getPerson(), amount, ratesAmount, ratesInYear, creditworthiness);
 			descending.push_back(loan);
 			creditworthiness -= loan.get_interest();
 		}

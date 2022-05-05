@@ -15,16 +15,17 @@
 class Bank;
 
 
-class Person{
+class Person : public std::enable_shared_from_this<Person> {
 private:
 	std::vector<FixedInstallmentLoan> fixed;
 	std::vector<DescendingInstallmentLoan> descending;
-	Bank* bank;
+	std::shared_ptr<Bank> bank;
 	unsigned int income;
 	unsigned int livingCost;
 	double creditworthiness;
+	std::shared_ptr<Person> getPerson() { return shared_from_this(); }
 public:
-	Person(Bank *bank, unsigned int income, unsigned int livingCost);
+	Person(std::shared_ptr<Bank> aBank, unsigned int income, unsigned int livingCost);
 	int get_income();
 	int get_living_cost();
 	void set_income(const unsigned int& income);

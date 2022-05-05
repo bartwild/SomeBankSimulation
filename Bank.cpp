@@ -13,7 +13,8 @@ Bank::Bank(const double& aInterestRate) {
 	else { interestRate = aInterestRate; }
 }
 
-FixedInstallmentLoan BankBranchFixed::give_loan(Bank* bank, Person* person, const double& amount, const unsigned int& ratesAmount, const unsigned int& ratesInYear, const double& creditworthiness) {
+FixedInstallmentLoan BankBranchFixed::give_loan(std::shared_ptr<Bank> bank, std::shared_ptr<Person> person, const double& amount,
+	const unsigned int& ratesAmount, const unsigned int& ratesInYear, const double& creditworthiness) {
 	if (amount <= 0 || ratesAmount <= 0 || ratesInYear <= 0 )
 	{ throw std::out_of_range("Any of loan parameter cannot be negative."); }
 	FixedInstallmentLoan loan = FixedInstallmentLoan(Authorisation(), amount, this->interestRate, ratesAmount, ratesInYear, creditworthiness);
@@ -40,7 +41,7 @@ FixedInstallmentLoan BankBranchFixed::create_loan_fixed(const double& amount, co
 }
 
 
-DescendingInstallmentLoan BankBranchDescending::give_loan(Bank* bank, Person* person, const double& amount,
+DescendingInstallmentLoan BankBranchDescending::give_loan(std::shared_ptr<Bank> bank, std::shared_ptr<Person> person, const double& amount,
 	const unsigned int& ratesAmount, const unsigned int& ratesInYear, const double& creditworthiness) {
 	if (amount <= 0 || ratesAmount <= 0 || ratesInYear <= 0)
 	{ throw std::out_of_range("Any of loan parameter cannot be negative.");  }
@@ -89,9 +90,10 @@ FixedInstallmentLoan Bank::create_loan_fixed(const double& amount, const unsigne
 	return fixedBranch.create_loan_fixed(amount, ratesAmount, ratesInYear);
 }
 
-FixedInstallmentLoan Bank::give_loan_fixed(Person* person, const double& amount, const unsigned int& ratesAmount, const unsigned int& ratesInYear, const double& creditworthiness){
+FixedInstallmentLoan Bank::give_loan_fixed(std::shared_ptr<Person> person, const double& amount,
+	const unsigned int& ratesAmount, const unsigned int& ratesInYear, const double& creditworthiness){
 	BankBranchFixed fixedBranch = BankBranchFixed(interestRate);
-	return fixedBranch.give_loan(this, person, amount, ratesAmount, ratesInYear, creditworthiness);
+	return fixedBranch.give_loan(get_bank(), person, amount, ratesAmount, ratesInYear, creditworthiness);
 }
 
 double Bank::get_fixed_loan_negative_creditworthiness(FixedInstallmentLoan& loan) const noexcept {
@@ -109,9 +111,10 @@ DescendingInstallmentLoan Bank::create_loan_descending(const double& amount, con
 	return descendingBranch.create_loan_descending(amount, ratesAmount, ratesInYear);
 }
 
-DescendingInstallmentLoan Bank::give_loan_descending(Person* person, const double& amount, const unsigned int& ratesAmount, const unsigned int& ratesInYear, const double& creditworthiness){
+DescendingInstallmentLoan Bank::give_loan_descending(std::shared_ptr<Person> person, const double& amount,
+	const unsigned int& ratesAmount, const unsigned int& ratesInYear, const double& creditworthiness){
 	BankBranchDescending descendingBranch = BankBranchDescending(interestRate);
-	return descendingBranch.give_loan(this, person, amount, ratesAmount, ratesInYear, creditworthiness);
+	return descendingBranch.give_loan(get_bank(), person, amount, ratesAmount, ratesInYear, creditworthiness);
 }
 
 double Bank::get_descending_loan_negative_creditworthiness(DescendingInstallmentLoan& loan) const noexcept {
@@ -124,7 +127,7 @@ void Bank::overpay_descending(DescendingInstallmentLoan& loan, const double& amo
 	descendingBranch.overpay_descending(loan, amount);
 }
 
-void Bank::add_person(Authorisation, Person* person) noexcept {
+void Bank::add_person(Authorisation, std::shared_ptr<Person> person) noexcept {
 	people.push_back(person);
 }
 

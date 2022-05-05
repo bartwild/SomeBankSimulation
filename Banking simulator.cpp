@@ -20,8 +20,8 @@ using std::endl;
 
 int main() {
     auto start = std::chrono::system_clock::now();
-    std::unique_ptr<Bank> bankPtr = std::make_unique<Bank>(0.21);
-    std::unique_ptr<Person>dawidPtr = std::make_unique<Person>(&*bankPtr, 25000, 2000);
+    std::shared_ptr<Bank> bankPtr = std::make_shared<Bank>(0.21);
+    std::shared_ptr<Person>dawidPtr = std::make_shared<Person>(bankPtr, 25000, 2000);
     std::string fixed = "fixed";
     std::string descending = "descending";
     cout << "Creditworthiness: " << dawidPtr->get_creditworthiness() << endl;
@@ -68,8 +68,8 @@ int main() {
     cout << "Total costs of single loan: " << dawidPtr->get_loan_costs_single(descending, 0) << endl;
     cout << "All rates sum: " << dawidPtr->get_interest_total() << endl;
     cout << endl;
-    BankIO::save_file_one_person(*bankPtr, *dawidPtr);
-    BankIO::load_total_loan(*dawidPtr, 0);
+    BankIO::save_file_one_person(bankPtr, dawidPtr);
+    BankIO::load_total_loan(dawidPtr, 0);
     cout << "Add from file to current - making loan single and fixed, so the price is going down as for single loan:" << endl;
     cout << dawidPtr->get_amount_total_left() << endl;
     cout << "So the diff is: " << dawidPtr->get_amount_total_left() - 2* dawidPtr->get_amount_single_left(fixed, 2) << endl;
