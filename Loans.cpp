@@ -25,21 +25,6 @@ void FixedInstallmentLoan::overpay(Authorisation, const double& aAmountOfOverpay
 }
 
 
-double FixedInstallmentLoan::get_interest() { return interest; }
-
-
-double FixedInstallmentLoan::get_loan_costs_total() { return loanCosts; }
-
-
-double FixedInstallmentLoan::get_amount_left() { return amount; }
-
-
-int FixedInstallmentLoan::get_rates_amount() { return ratesAmount; }
-
-
-double FixedInstallmentLoan::get_negative_creditworthiness(Authorisation) { return negativeCreditworthiness; }
-
-
 void FixedInstallmentLoan::set_interest_rates(Authorisation, const double& aInterestRate) {
 	double tempAmount = interest* (ratesInYear * (1 - pow((ratesInYear / (ratesInYear + interestRate)), ratesAmount)) / interestRate);
 	interest = tempAmount * aInterestRate / (ratesInYear * (1 - pow((ratesInYear / (ratesInYear + aInterestRate)), ratesAmount)));
@@ -48,37 +33,6 @@ void FixedInstallmentLoan::set_interest_rates(Authorisation, const double& aInte
 	amount = interest * ratesAmount;
 	loanCosts = loanCosts - tempAmount + amount;
 }
-
-
-bool FixedInstallmentLoan::operator>(FixedInstallmentLoan loan){
-	if (loan.get_loan_costs_total() < loanCosts) { return true; }
-	return false;
-}
-
-
-bool FixedInstallmentLoan::operator<(FixedInstallmentLoan loan) {
-	if (loan.get_loan_costs_total() > loanCosts) { return true; }
-	return false;
-}
-
-
-bool FixedInstallmentLoan::operator>(DescendingInstallmentLoan loan) {
-	if (loan.get_loan_costs_total() < loanCosts) { return true; }
-	return false;
-}
-
-
-bool FixedInstallmentLoan::operator<(DescendingInstallmentLoan loan) {
-	if (loan.get_loan_costs_total() > loanCosts) { return true; }
-	return false;
-}
-
-
-std::ostream& operator<<(std::ostream& os, FixedInstallmentLoan& loan) {
-	os << "Fixed installment loan with total cost: " << loan.loanCosts << " and current installment: " << loan.interest << std::endl;
-	return os;
-}
-
 
 DescendingInstallmentLoan::DescendingInstallmentLoan(Authorisation, const double& aAmount, const double& aInterestRate, int aRatesAmount, int aRatesInYear, const double& creditworthiness) {
 	interest = (double(aAmount / aRatesAmount)) * (1 + aRatesAmount * aInterestRate / aRatesInYear);
@@ -108,22 +62,6 @@ void DescendingInstallmentLoan::overpay(Authorisation, const double& aAmountOfOv
 
 }
 
-
-double DescendingInstallmentLoan::get_interest() { return interest; }
-
-
-double DescendingInstallmentLoan::get_loan_costs_total() { return loanCosts; }
-
-
-double DescendingInstallmentLoan::get_amount_left() { return amount; }
-
-
-int DescendingInstallmentLoan::get_rates_amount() { return ratesAmount; }
-
-
-double DescendingInstallmentLoan::get_negative_creditworthiness(Authorisation) { return negativeCreditworthiness; }
-
-
 void DescendingInstallmentLoan::set_interest_rates(Authorisation, const double& aInterestRate) {
 	double nettoAmount = interest * ratesAmount / (1 + (ratesAmount)*interestRate / ratesInYear);
 	interestRate = aInterestRate;
@@ -136,31 +74,47 @@ void DescendingInstallmentLoan::set_interest_rates(Authorisation, const double& 
 	amount = tempAmount;
 }
 
-bool DescendingInstallmentLoan::operator>(DescendingInstallmentLoan loan) {
+bool Loan::operator>(FixedInstallmentLoan loan){
 	if (loan.get_loan_costs_total() < loanCosts) { return true; }
 	return false;
 }
 
+bool Loan::operator<(FixedInstallmentLoan loan){
+	if (loan.get_loan_costs_total() > loanCosts) { return true; }
+	return false;
+}
 
-bool DescendingInstallmentLoan::operator>(FixedInstallmentLoan loan) {
+bool Loan::operator>(DescendingInstallmentLoan loan){
 	if (loan.get_loan_costs_total() < loanCosts) { return true; }
 	return false;
 }
 
-
-bool DescendingInstallmentLoan::operator<(FixedInstallmentLoan loan) {
+bool Loan::operator<(DescendingInstallmentLoan loan){
 	if (loan.get_loan_costs_total() > loanCosts) { return true; }
 	return false;
 }
 
-
-bool DescendingInstallmentLoan::operator<(DescendingInstallmentLoan loan) {
-	if (loan.get_loan_costs_total() > loanCosts) { return true; }
-	return false;
+double Loan::get_negative_creditworthiness(Authorisation) const noexcept {
+	return negativeCreditworthiness;
 }
 
+double Loan::get_interest() const noexcept {
+	return interest;
+}
 
-std::ostream& operator<<(std::ostream& os, DescendingInstallmentLoan& loan){
-	os << "Descending installment loan with total cost: " << loan.loanCosts << " and current installment: " << loan.interest << std::endl;
+double Loan::get_loan_costs_total() const noexcept {
+	return loanCosts;
+}
+
+double Loan::get_amount_left() const noexcept {
+	return amount;
+}
+
+int Loan::get_rates_amount() const noexcept {
+	return ratesAmount;
+}
+
+std::ostream& operator<<(std::ostream& os, Loan& loan) noexcept {
+	os << "Loan with total cost: " << loan.loanCosts << " and current installment: " << loan.interest << std::endl;
 	return os;
 }

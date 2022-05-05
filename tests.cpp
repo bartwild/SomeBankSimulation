@@ -11,23 +11,27 @@
 
 std::string fixed = "fixed";
 std::string descending = "descending";
-
+/*
 
 TEST_CASE("Testing constructors correct.") {
-    Bank Bank(0.21);
-    Person Dawid(&Bank, 25000, 2000);
-    Dawid.get_loan(fixed, 10000, 12, 12);
+    std::unique_ptr<Bank> bank = std::make_unique<Bank>(0.21);
+    BankBranchFixed fixedBank(0.21);
+    BankBranchDescending descendingBank(0.21);
+    std::unique_ptr<Person> Dawid = std::make_unique<Person>(bank, 25000, 2000);
+    Dawid->get_loan(fixed, 10000, 12, 12);
 
     SECTION("Check if Bank created.") {
-        REQUIRE(Bank.get_interest_rate() == 0.21);
+        REQUIRE(bank->get_interest_rate() == 0.21);
+        REQUIRE(fixedBank.get_interest_rate() == 0.21);
+        REQUIRE(descendingBank.get_interest_rate() == 0.21);
     }
 
     SECTION("Check if Person created.") {
-        REQUIRE(Dawid.get_living_cost() == 2000);
+        REQUIRE(Dawid->get_living_cost() == 2000);
     }
 
     SECTION("Check if Loan created.") {
-        REQUIRE(Dawid.get_amount_single_left(fixed, 0) == Approx(11173.65));
+        REQUIRE(Dawid->get_amount_single_left(fixed, 0) == Approx(11173.65));
     }
 }
 
@@ -188,3 +192,4 @@ TEST_CASE("Input/output with file") {
     REQUIRE(Dawid.get_creditworthiness() < 11500);
     REQUIRE(Dawid.get_loan_costs_single(fixed, 0) == Dawid.get_loan_costs_total());
 }
+*/

@@ -15,19 +15,51 @@ class Person;
 
 
 class Bank{
-private:
+protected:
 	double interestRate;
 	std::vector<Person*> people;
 public:
 	Bank(const double& interestRate);
-	FixedInstallmentLoan create_loan_fixed(const double& amount, const unsigned int& ratesAmount, const unsigned int& ratesInYear);
-	DescendingInstallmentLoan create_loan_descending(const double& amount, const unsigned int& ratesAmount, const unsigned int& ratesInYear);
-	FixedInstallmentLoan give_loan_fixed(Person* person, const double& amount, const unsigned int& ratesAmount, const unsigned int& ratesInYear, const double& creditworthiness);
-	DescendingInstallmentLoan give_loan_descending(Person* person, const double& amount, const unsigned int& ratesAmount, const unsigned int& ratesInYear, const double& creditworthiness);
-	void overpay_descending(DescendingInstallmentLoan& loan, const double& amount);
-	void overpay_fixed(FixedInstallmentLoan& loan, const double& amount);
 	void set_interest_rate(const double& interestRate);
-	double get_interest_rate();
-	double get_fixed_loan_negative_creditworthiness(FixedInstallmentLoan& loan);
-	double get_descending_loan_negative_creditworthiness(DescendingInstallmentLoan& loan);
+	virtual double get_interest_rate() const noexcept;
+	virtual FixedInstallmentLoan create_loan_fixed(const double& amount, const unsigned int& ratesAmount, const unsigned int& ratesInYear) const;
+	virtual FixedInstallmentLoan give_loan_fixed(Person* person, const double& amount,
+		const unsigned int& ratesAmount, const unsigned int& ratesInYear, const double& creditworthiness);
+	virtual double get_fixed_loan_negative_creditworthiness(FixedInstallmentLoan& loan) const noexcept;
+	virtual void overpay_fixed(FixedInstallmentLoan& loan, const double& amount);
+	virtual DescendingInstallmentLoan create_loan_descending(const double& amount, const unsigned int& ratesAmount, const unsigned int& ratesInYear) const;
+	virtual DescendingInstallmentLoan give_loan_descending(Person* person, const double& amount,
+	const unsigned int& ratesAmount, const unsigned int& ratesInYear, const double& creditworthiness);
+	virtual double get_descending_loan_negative_creditworthiness(DescendingInstallmentLoan& loan) const noexcept;
+	virtual void overpay_descending(DescendingInstallmentLoan& loan, const double& amount);
+	void add_person(Authorisation, Person* person) noexcept;
+	virtual ~Bank();
+};
+
+
+class BankBranchFixed : protected Bank {
+protected:
+	double interestRate;
+public:
+	double get_interest_rate() const noexcept;
+	BankBranchFixed(const double& aInterestRate) : Bank(aInterestRate) { interestRate = aInterestRate; }
+	FixedInstallmentLoan create_loan_fixed(const double& amount, const unsigned int& ratesAmount, const unsigned int& ratesInYear) const override;
+	FixedInstallmentLoan give_loan(Bank* bank, Person* person, const double& amount,
+		const unsigned int& ratesAmount, const unsigned int& ratesInYear, const double& creditworthiness);
+	double get_fixed_loan_negative_creditworthiness(FixedInstallmentLoan& loan) const noexcept override;
+	void overpay_fixed(FixedInstallmentLoan& loan, const double& amount) override;
+};
+
+
+class BankBranchDescending : protected Bank {
+protected:
+	double interestRate;
+public:
+	double get_interest_rate() const noexcept;
+	BankBranchDescending(const double& aInterestRate) : Bank(aInterestRate) { interestRate = aInterestRate; }
+	DescendingInstallmentLoan create_loan_descending(const double& amount, const unsigned int& ratesAmount, const unsigned int& ratesInYear) const override;
+	DescendingInstallmentLoan give_loan(Bank* bank, Person* person, const double& amount,
+		const unsigned int& ratesAmount, const unsigned int& ratesInYear, const double& creditworthiness);
+	double get_descending_loan_negative_creditworthiness(DescendingInstallmentLoan& loan) const noexcept override;
+	void overpay_descending(DescendingInstallmentLoan& loan, const double& amount) override;
 };
